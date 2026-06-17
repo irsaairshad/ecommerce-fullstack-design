@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { getProducts } from '../api';
 
 const categories = [
   "Automobiles", "Clothes and wear", "Home interiors",
@@ -38,17 +40,6 @@ const electronics = [
   { name: "Smart watches", price: "USD 19", img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=150" },
 ];
 
-const recommended = [
-  { name: "T-shirts with multiple colors", price: "$10.30", img: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=150" },
-  { name: "Casual brown jacket", price: "$11.90", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=150" },
-  { name: "Jeans bag for travel", price: "$34.00", img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=150" },
-  { name: "Leather wallet", price: "$99.00", img: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=150" },
-  { name: "Canon camera", price: "$9.99", img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=150" },
-  { name: "Headset for gaming", price: "$8.99", img: "https://images.unsplash.com/photo-1599669454699-248893623440?w=150" },
-  { name: "Smartwatch silver", price: "$10.30", img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=150" },
-  { name: "Blue wallet for men", price: "$10.30", img: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=150" },
-];
-
 const extraServices = [
   { title: "Source from Industry Hubs", icon: "🔍", img: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=400" },
   { title: "Customize Your Products", icon: "✏️", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400" },
@@ -70,11 +61,18 @@ const suppliers = [
 ];
 
 export default function Home() {
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+
+  useEffect(() => {
+    getProducts().then(data => setFeaturedProducts(data.slice(0, 8))).catch(err => console.error(err));
+  }, []);
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex gap-4">
+
           {/* SIDEBAR */}
           <div className="hidden md:block w-48 shrink-0 bg-white rounded shadow-sm p-3">
             {categories.map((cat, i) => (
@@ -160,7 +158,7 @@ export default function Home() {
           </div>
           <div className="flex-1 p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {featured.map((item, i) => (
-              <Link to={`/product/${i+1}`} key={i}>
+              <Link to="/products" key={i}>
                 <div className="border rounded-lg p-2 hover:shadow-md">
                   <img src={item.img} alt={item.name} className="w-full h-16 object-contain mb-1" />
                   <p className="text-xs font-semibold text-gray-700">{item.name}</p>
@@ -183,7 +181,7 @@ export default function Home() {
           </div>
           <div className="flex-1 p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {electronics.map((item, i) => (
-              <Link to={`/product/${i+1}`} key={i}>
+              <Link to="/products" key={i}>
                 <div className="border rounded-lg p-2 hover:shadow-md">
                   <img src={item.img} alt={item.name} className="w-full h-16 object-contain mb-1" />
                   <p className="text-xs font-semibold text-gray-700">{item.name}</p>
@@ -212,20 +210,26 @@ export default function Home() {
           </div>
         </div>
 
-        {/* RECOMMENDED */}
+        {/* RECOMMENDED - DYNAMIC FROM MONGODB */}
         <div className="bg-white rounded-lg shadow-sm p-4 mt-4">
           <h2 className="font-bold text-gray-800 mb-3">Recommended items</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
-            {recommended.map((item, i) => (
-              <Link to={`/product/${i+1}`} key={i}>
-                <div className="border rounded-lg p-2 hover:shadow-md">
-                  <img src={item.img} alt={item.name} className="w-full h-20 object-contain mb-1" />
-                  <p className="text-xs font-bold text-gray-800">{item.price}</p>
-                  <p className="text-xs text-gray-500">{item.name}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {featuredProducts.length === 0 ? (
+            <div className="text-center py-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
+              {featuredProducts.map((item) => (
+                <Link to={`/product/${item._id}`} key={item._id}>
+                  <div className="border rounded-lg p-2 hover:shadow-md cursor-pointer">
+                    <img src={item.image} alt={item.name} className="w-full h-20 object-contain mb-1" />
+                    <p className="text-xs font-bold text-gray-800">${item.price}</p>
+                    <p className="text-xs text-gray-500 line-clamp-1">{item.name}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* EXTRA SERVICES */}
