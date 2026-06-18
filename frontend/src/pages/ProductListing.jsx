@@ -1,8 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { getProducts } from '../api';
 
 function Stars({ rating }) {
   return (
@@ -20,18 +19,40 @@ export default function ProductListing() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [showFilter, setShowFilter] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    const params = new URLSearchParams(location.search);
+    const cat = params.get('category') || '';
+    const q = params.get('search') || '';
+    setCategory(cat);
+    setSearch(q);
+    fetchProducts(q, cat);
+  }, [location.search]);
 
   const fetchProducts = async (s = '', c = '') => {
     setLoading(true);
     try {
-      const data = await getProducts(s, c);
-      setProducts(data);
+      let url = 'http://localhost:5000/api/products';
+      const params = [];
+      if (s) params.push(`search=${s}`);
+      if (c) params.push(`category=${c}`);
+      if (params.length > 0) url += '?' + params.join('&');
+      
+      const res = await fetch(url);
+      const data = await res.json();
+      
+      // Agar category set hai aur products nahi mile
+      if (c && data.length === 0) {
+        setProducts([]);
+      } else if (!c && !s) {
+        setProducts(data);
+      } else {
+        setProducts(data);
+      }
     } catch (err) {
       console.error('Error fetching products:', err);
+      setProducts([]);
     }
     setLoading(false);
   };
@@ -168,8 +189,17 @@ export default function ProductListing() {
             {/* Products List */}
             {!loading && products.length === 0 && (
               <div className="bg-white rounded-lg shadow-sm p-10 text-center">
-                <p className="text-gray-500">No products found!</p>
-                <button onClick={() => { setSearch(''); setCategory(''); fetchProducts(); }} className="mt-3 text-blue-600 text-sm hover:underline">Clear search</button>
+                <p className="text-4xl mb-3">📦</p>
+                <p className="text-gray-700 font-semibold mb-1">No products found!</p>
+                <p className="text-gray-500 text-sm mb-4">
+                  {category ? `No products in "${category}" category yet.` : 'No products match your search.'}
+                </p>
+                <button 
+                  onClick={() => { setSearch(''); setCategory(''); fetchProducts('', ''); }} 
+                  className="text-blue-600 text-sm hover:underline"
+                >
+                  View all products
+                </button>
               </div>
             )}
 

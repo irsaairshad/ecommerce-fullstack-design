@@ -1,30 +1,22 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
 // Routes
 app.use('/api/products', require('./routes/products'));
+app.use('/api/auth', require('./routes/auth'));
 
-// Test route
 app.get('/', (req, res) => {
   res.json({ message: 'Ecommerce API is running!' });
 });
 
-const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/ecommerce_fullstack_design';
-
-if (!mongoUri) {
-  console.error('MongoDB Error: MONGO_URI is not defined in .env or environment variables.');
-  process.exit(1);
-}
-
-mongoose.connect(mongoUri)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('MongoDB Connected!');
     app.listen(process.env.PORT || 5000, () => {
