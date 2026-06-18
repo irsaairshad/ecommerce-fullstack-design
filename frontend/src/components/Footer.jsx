@@ -73,7 +73,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-blue-700 pt-3 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-gray-400">
-        <span>© 2023 Ecommerce.</span>
+        <span>© 2026 Ecommerce.</span>
         <span>🇺🇸 English</span>
       </div>
     </footer>
