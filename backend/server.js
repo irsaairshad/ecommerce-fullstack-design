@@ -16,7 +16,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'Ecommerce API is running!' });
 });
 
-mongoose.connect(process.env.MONGO_URI)
+const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://IrsaIrshad:12345@lab3cluster.aubkzpf.mongodb.net/ecommerce?retryWrites=true&w=majority';
+mongoose.connect(MONGO_URI)
   .then(() => {
     console.log('MongoDB Connected!');
     app.listen(process.env.PORT || 5000, () => {
