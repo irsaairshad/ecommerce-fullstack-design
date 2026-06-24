@@ -14,12 +14,14 @@ export default function AdminPanel() {
   const emptyForm = { name: '', price: '', oldPrice: '', image: '', description: '', category: '', stock: '' };
   const [form, setForm] = useState(emptyForm);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!user || user.role !== 'admin') {
       navigate('/login');
       return;
     }
     fetchProducts();
+    
   }, [user]);
 
   const fetchProducts = async () => {

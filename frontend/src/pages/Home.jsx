@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -35,7 +35,6 @@ const suppliers = [
 
 export default function Home() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [furnitureProducts, setFurnitureProducts] = useState([]);
   const [electronicsProducts, setElectronicsProducts] = useState([]);

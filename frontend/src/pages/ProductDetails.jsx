@@ -22,6 +22,7 @@ export default function ProductDetails() {
   const [activeTab, setActiveTab] = useState("description");
   const [cartMsg, setCartMsg] = useState('');
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchProduct();
   }, [id]);

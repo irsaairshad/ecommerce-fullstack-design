@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://ecommerce-backend-pv3q.onrender.com';
 
 export const getProducts = async (search = '', category = '') => {
   const res = await fetch(`${API_URL}/products?search=${search}&category=${category}`);
