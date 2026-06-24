@@ -1,8 +1,12 @@
+require('dotenv').config();
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
-const MONGO_URI = 'mongodb://127.0.0.1:27017/ecommerce_fullstack_design';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/ecommerce';
 
 async function createAdmin() {
   try {

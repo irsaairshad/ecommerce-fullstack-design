@@ -1,3 +1,7 @@
+require('dotenv').config();
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -14,7 +18,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Ecommerce API is running!' });
 });
 
-const MONGO_URI = 'mongodb://127.0.0.1:27017/ecommerce';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/ecommerce';
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(MONGO_URI)

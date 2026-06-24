@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import { API_URL } from '../api';
 
 export default function AdminPanel() {
   const { user, token, logout } = useAuth();
@@ -26,7 +27,7 @@ export default function AdminPanel() {
 
   const fetchProducts = async () => {
     setLoading(true);
-    const res = await fetch('http://localhost:5000/api/products');
+    const res = await fetch(`${API_URL}/api/products`);
     const data = await res.json();
     setProducts(data);
     setLoading(false);
@@ -35,8 +36,8 @@ export default function AdminPanel() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = editProduct
-      ? `http://localhost:5000/api/products/${editProduct._id}`
-      : 'http://localhost:5000/api/products';
+      ? `${API_URL}/api/products/${editProduct._id}`
+      : `${API_URL}/api/products`;
     const method = editProduct ? 'PUT' : 'POST';
 
     const res = await fetch(url, {
@@ -74,7 +75,7 @@ export default function AdminPanel() {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this product?')) return;
-    await fetch(`http://localhost:5000/api/products/${id}`, {
+    await fetch(`${API_URL}/api/products/${id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     });

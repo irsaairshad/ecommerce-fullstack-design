@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { API_URL } from '../api';
 
 function Stars({ rating }) {
   return (
@@ -33,7 +34,7 @@ export default function ProductListing() {
   const fetchProducts = async (s = '', c = '') => {
     setLoading(true);
     try {
-      let url = 'http://localhost:5000/api/products';
+      let url = `${API_URL}/api/products`;
       const params = [];
       if (s) params.push(`search=${s}`);
       if (c) params.push(`category=${c}`);

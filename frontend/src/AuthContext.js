@@ -3,15 +3,15 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
-
-  useEffect(() => {
-    if (token) {
-      const saved = localStorage.getItem('user');
-      if (saved) setUser(JSON.parse(saved));
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem('user');
+    try {
+      return saved ? JSON.parse(saved) : null;
+    } catch (err) {
+      return null;
     }
-  }, [token]);
+  });
+  const [token, setToken] = useState(() => localStorage.getItem('token'));
 
   const login = (userData, userToken) => {
     setUser(userData);
