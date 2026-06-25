@@ -191,7 +191,7 @@ const products = [
   {
     name: "Men Formal Suit Navy Blue",
     price: 199.00, oldPrice: 279.00,
-    image: "https://images.unsplash.com/photo-1594938298603-c8148c4b4de6?w=400",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6_zFOEjgUGuefP2A5ipcjy4nlxYvZIrhsKQ&s",
     description: "Elegant navy blue formal suit. Perfect for business meetings and formal events.",
     category: "Clothes", stock: 20, rating: 5, reviews: 89, shipping: "Free Shipping"
   },
